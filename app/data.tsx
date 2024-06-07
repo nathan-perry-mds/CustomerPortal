@@ -1,11 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import dynamoDB from '../../../utils/aws'; // Adjust the import path as necessary
+import dynamoDB from '../utils/aws'; // Adjust the import path as necessary
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   console.log('API Route Hit');
-  console.log('AWS Region:', process.env.AWS_REGION);
-  console.log('AWS Access Key ID:', process.env.AWS_ACCESS_KEY_ID);
-
   if (req.method === 'GET') {
     const params = {
       TableName: '655_main'

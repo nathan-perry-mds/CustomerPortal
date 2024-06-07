@@ -8,7 +8,7 @@ const Home = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('pages/under-construction');
+    router.push('under-construction');
   }, [router]);
 
   return null;
