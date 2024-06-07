@@ -1,9 +1,9 @@
 // tailwind.config.js
 module.exports = {
   content: [
+    './app/**/*.{js,ts,jsx,tsx}', // Including the app directory
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
-    './app/**/*.{js,ts,jsx,tsx}', // Ensure you include your app directory
   ],
   theme: {
     extend: {

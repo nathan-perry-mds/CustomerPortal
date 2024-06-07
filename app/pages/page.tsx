@@ -7,7 +7,7 @@ const Home = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/under-construction');
+    router.push('pages/under-construction');
   }, [router]);
 
   return null;

@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server.js",
     "lint": "next lint",
     "build:tailwind": "ts-node tailwind.config.ts"
   },
   "dependencies": {
+    "aws-sdk": "^2.1636.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18"
