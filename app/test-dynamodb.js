@@ -2,6 +2,7 @@ const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { ScanCommand } = require("@aws-sdk/lib-dynamodb");
 const { fromIni } = require("@aws-sdk/credential-provider-ini");
 const globalTunnel = require('global-tunnel-ng');
+import { HttpsProxyAgent } from 'https-proxy-agent';
 
 // Initialize proxy settings
 globalTunnel.initialize({
@@ -10,13 +11,17 @@ globalTunnel.initialize({
   protocol: 'https'
 });
 
-// Create an AWS DynamoDB client
+// app/api/data/route.ts
+const proxy = process.env.HTTPS_PROXY || process.env.HTTP_PROXY;
 const client = new DynamoDBClient({
-  region: process.env.AWS_REGION,
+  region: process.env.NEXT_PUBLIC_AWS_REGION,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
   },
+  ...(proxy && {
+    requestHandler: new HttpsProxyAgent(proxy),
+  }),
 });
 
 // Function to scan the DynamoDB table
