@@ -2,13 +2,18 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { DynamoDBClient, ListTablesCommand } from '@aws-sdk/client-dynamodb';
+import { HttpsProxyAgent } from 'https-proxy-agent';
 
+const proxy = process.env.HTTPS_PROXY || process.env.HTTP_PROXY;
 const client = new DynamoDBClient({
   region: process.env.NEXT_PUBLIC_AWS_REGION,
   credentials: {
     accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID!,
     secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY!,
   },
+  ...(proxy && {
+    requestHandler: new HttpsProxyAgent(proxy),
+  }),
 });
 
 export async function GET(req: NextRequest) {
@@ -19,7 +24,6 @@ export async function GET(req: NextRequest) {
   console.log('AWS_ACCESS_KEY_ID:', process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID);
   console.log('AWS_SECRET_ACCESS_KEY:', process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY);
 
-  // Log proxy settings
   console.log('HTTP_PROXY:', process.env.HTTP_PROXY);
   console.log('HTTPS_PROXY:', process.env.HTTPS_PROXY);
   console.log('NO_PROXY:', process.env.NO_PROXY);
