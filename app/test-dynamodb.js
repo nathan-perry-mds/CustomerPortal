@@ -6,7 +6,7 @@ import { HttpsProxyAgent } from 'https-proxy-agent';
 
 // Initialize proxy settings
 globalTunnel.initialize({
-  host: 'cn-1793907154-5-vnsg10006.ibossgov.com',
+  host: process.env.HTTPS_PROXY,
   port: 80,
   protocol: 'https'
 });
