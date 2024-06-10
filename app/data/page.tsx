@@ -12,7 +12,7 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch('/api/data');
+      const response = await fetch('/api/data/'); // Ensure this is correct
       if (response.ok) {
         const result: DynamoDBItem[] = await response.json();
         setData(result);
@@ -20,9 +20,9 @@ export default function Home() {
         console.error('Failed to fetch data from the API');
       }
     }
-
+  
     fetchData();
-  }, []);
+  }, []);  
 
   return (
     <div>
