@@ -20,14 +20,6 @@ export async function GET(req: NextRequest) {
   console.log('API Route Hit');
   console.log('Request Method:', req.method);
 
- // console.log('AWS_REGION:', process.env.NEXT_PUBLIC_AWS_REGION);
- // console.log('AWS_ACCESS_KEY_ID:', process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID);
- // console.log('AWS_SECRET_ACCESS_KEY:', process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY);
-
- // console.log('HTTP_PROXY:', process.env.HTTP_PROXY);
- // console.log('HTTPS_PROXY:', process.env.HTTPS_PROXY);
- // console.log('NO_PROXY:', process.env.NO_PROXY);
-
   console.log('Handling GET request');
 
   const tableName = req.nextUrl.searchParams.get('tableName');
