@@ -1,16 +1,22 @@
 version: 1
-frontend:
-  phases:
-    preBuild:
-      commands:
-        - npm ci
-    build:
-      commands:
-        - npm run build
-  artifacts:
-    baseDirectory: .next
-    files:
-      - '**/*'
-  cache:
-    paths:
-      - node_modules/**/*
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - yarn install
+        build:
+          commands:
+            - yarn build
+      artifacts:
+        baseDirectory: out
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - node_modules/**/*
+      environment:
+        variables:
+          AWS_REGION: "us-east-2"
+          AWS_ACCESS_KEY_ID: "AKIAW3MD7VFK2BFN4WJZ"
+          AWS_SECRET_ACCESS_KEY: "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"
