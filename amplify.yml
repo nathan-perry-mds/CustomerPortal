@@ -9,7 +9,7 @@ applications:
           commands:
             - yarn build
       artifacts:
-        baseDirectory: .next  # Change this to `out` if you're using `next export`
+        baseDirectory: .next 
         files:
           - '**/*'
       cache:

@@ -1,3 +1,5 @@
+// app/api/data/route.ts
+
 import { NextRequest, NextResponse } from 'next/server';
 import { DynamoDBClient, ListTablesCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
 
@@ -19,6 +21,13 @@ export async function GET(req: NextRequest) {
 
   console.log('Handling GET request');
 
+  const { searchParams } = new URL(req.url);
+  const tableName = searchParams.get('tableName');
+
+  if (!tableName) {
+    return NextResponse.json({ error: 'Missing tableName parameter' }, { status: 400 });
+  }
+
   try {
     console.log('Testing DynamoDB connectivity');
     const startTime = Date.now();
@@ -38,14 +47,27 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  try {
-    const { TableName } = await req.json();
-    if (!TableName) {
-      return NextResponse.json({ error: 'TableName parameter is required' }, { status: 400 });
-    }
+  console.log('API Route Hit');
+  console.log('Request Method:', req.method);
 
-    const command = new ScanCommand({ TableName });
+  const { searchParams } = new URL(req.url);
+  const tableName = searchParams.get('tableName');
+
+  if (!tableName) {
+    return NextResponse.json({ error: 'Missing tableName parameter' }, { status: 400 });
+  }
+
+  try {
+    console.log(`Scanning table ${tableName}`);
+    const startTime = Date.now();
+
+    const command = new ScanCommand({ TableName: tableName });
     const data = await client.send(command);
+
+    const endTime = Date.now();
+    console.log(`DynamoDB scan completed in ${endTime - startTime}ms`);
+    console.log('Scan results:', data.Items);
+
     return NextResponse.json(data.Items, { status: 200 });
   } catch (error) {
     console.error('Error scanning DynamoDB table:', error);
