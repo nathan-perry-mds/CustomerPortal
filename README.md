@@ -38,3 +38,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 =======
 # CustomerPortal
 >>>>>>> origin/main
+#Install font awesome icons
+
+npm install @fortawesome/fontawesome-svg-core @fortawesome/pro-solid-svg-icons @fortawesome/react-fontawesome
+
+npm install @fortawesome/fontawesome-svg-core @fortawesome/pro-regular-svg-icons @fortawesome/react-fontawesome
+
+npm install @fortawesome/fontawesome-svg-core @fortawesome/pro-light-svg-icons @fortawesome/react-fontawesome
+
