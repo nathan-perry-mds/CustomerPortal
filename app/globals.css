@@ -31,3 +31,13 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Custom styles for the login page */
+.login-container {
+  @apply flex items-center h-screen bg-cover bg-center;
+  background-image: url('../public/background.jpg');
+}
+
+.login-form {
+  @apply w-full max-w-md p-8 bg-white bg-opacity-90 rounded-lg shadow-lg h-full flex flex-col justify-center;
+}

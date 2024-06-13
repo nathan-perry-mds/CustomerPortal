@@ -1,6 +1,12 @@
-import SignupForm from "../../ui/auth/confirm-signup-form";
+// pages/signup.tsx
+"use client";
 
-export default function SignUp() {
-    return <SignupForm />;
+import SignUpForm from "../../ui/auth/signup-form";
+
+export default function SignUpPage() {
+  return (
+    <div className="sign-up-container">
+      <SignUpForm />
+    </div>
+  );
 }
-

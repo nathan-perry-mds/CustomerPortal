@@ -2,7 +2,7 @@
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAt, faKey, faExclamationCircle, faArrowRight } from "@fortawesome/pro-solid-svg-icons";
-import { Button } from "../button";
+import { Button } from "../components/button";
 import { useFormState, useFormStatus } from "react-dom";
 import { handleConfirmSignUp } from "../../lib/cognitoActions";
 import SendVerificationCode from "../auth/send-verification-code-form";

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight, faExclamationCircle } from "@fortawesome/pro-solid-svg-icons";
 import { handleSendEmailVerificationCode } from "../../lib/cognitoActions";
 import { useFormState, useFormStatus } from "react-dom";
-import { Button } from "../button";
+import { Button } from "../components/button";
 
 export default function SendVerificationCode() {
   const [response, dispatch] = useFormState(handleSendEmailVerificationCode, {
