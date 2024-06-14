@@ -45,12 +45,13 @@ body {
   justify-content: center;
   padding: 2rem;
   background-color: rgba(255, 255, 255, 0.9);
-  max-width: 800; /* Increased width */
+  max-width: 800px; /* Increased width */
   margin-left: 2rem;
   margin-top: auto; /* Removed fixed margins */
   margin-bottom: auto; /* Removed fixed margins */
   border-radius: 1rem; /* Adjusted rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add a subtle shadow for depth */
+  color: inherit; /* Ensure text color adapts to theme */
 }
 
 .auth-form {
@@ -64,4 +65,9 @@ body {
   margin-left: 1rem;
   border-radius: 1rem 0 0 1rem; /* Adjusted rounded corners */
   overflow: hidden; /* Prevent content from overflowing rounded corners */
+}
+
+/* Ensure all input elements and labels use the correct text color */
+input, label, a, h1 {
+  color: inherit;
 }
