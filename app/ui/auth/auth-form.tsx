@@ -1,3 +1,4 @@
+// Example Component (AuthForm)
 "use client";
 
 import { useState } from "react";
@@ -7,19 +8,8 @@ import { faAt, faKey, faExclamationCircle, faArrowRight, faUser } from "@fortawe
 import { Button } from "../components/button";
 import { useFormState, useFormStatus } from "react-dom";
 import { handleSignIn, handleSignUp } from "../../lib/cognitoActions";
-import { AppProps } from 'next/app';
-import { useEffect } from 'react';
 import Link from "next/link";
 import Image from "next/image";
-import setBackground from '../../lib/setBackground';
-
-function MyApp({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    setBackground();
-  }, []);
-
-  return <Component {...pageProps} />;
-}
 
 export default function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -41,12 +31,12 @@ export default function AuthForm() {
         <form action={isSignUp ? signUpDispatch : signInDispatch} className="space-y-3 auth-form">
           {isSignUp && (
             <div>
-              <label className="mb-3 mt-5 block text-xs font-medium text-gray-900" htmlFor="name">
+              <label className="mb-3 mt-5 block text-xs font-medium" htmlFor="name">
                 Name
               </label>
               <div className="relative">
                 <input
-                  className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  className="peer block w-full rounded-md border py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                   id="name"
                   type="text"
                   name="name"
@@ -59,12 +49,12 @@ export default function AuthForm() {
             </div>
           )}
           <div>
-            <label className="mb-3 mt-5 block text-xs font-medium text-gray-900" htmlFor="email">
+            <label className="mb-3 mt-5 block text-xs font-medium" htmlFor="email">
               Email
             </label>
             <div className="relative">
               <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                 id="email"
                 type="email"
                 name="email"
@@ -75,12 +65,12 @@ export default function AuthForm() {
             </div>
           </div>
           <div className="mt-4">
-            <label className="mb-3 mt-5 block text-xs font-medium text-gray-900" htmlFor="password">
+            <label className="mb-3 mt-5 block text-xs font-medium" htmlFor="password">
               Password
             </label>
             <div className="relative">
               <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                 id="password"
                 type="password"
                 name="password"
@@ -93,15 +83,15 @@ export default function AuthForm() {
           </div>
           {isSignUp && (
             <div className="mt-4">
-              <label className="mb-3 mt-5 block text-xs font-medium text-gray-900" htmlFor="confirmPassword">
+              <label className="mb-3 mt-5 block text-xs font-medium" htmlFor="confirm-password">
                 Confirm Password
               </label>
               <div className="relative">
                 <input
-                  className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                  id="confirmPassword"
+                  className="peer block w-full rounded-md border py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  id="confirm-password"
                   type="password"
-                  name="confirmPassword"
+                  name="confirm-password"
                   placeholder="Confirm your password"
                   required
                 />
@@ -132,11 +122,7 @@ export default function AuthForm() {
   );
 }
 
-interface AuthButtonProps {
-  isSignUp: boolean;
-}
-
-function AuthButton({ isSignUp }: AuthButtonProps) {
+function AuthButton({ isSignUp }) {
   const { pending } = useFormStatus();
   return (
     <Button className="mt-4 w-full bg-customBlue text-white" aria-disabled={pending}>
