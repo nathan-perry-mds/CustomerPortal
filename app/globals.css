@@ -32,12 +32,36 @@ body {
   }
 }
 
-/* Custom styles for the login page */
-.login-container {
-  @apply flex items-center h-screen bg-cover bg-center;
-  background-image: url('../public/background.jpg');
+/* Custom styles for the auth page */
+.auth-page {
+  display: flex;
+  height: 100vh;
+  background-color: #f0f2f5; /* Light grey background for contrast */
 }
 
-.login-form {
-  @apply w-full max-w-md p-8 bg-white bg-opacity-90 rounded-lg shadow-lg h-full flex flex-col justify-center;
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+  background-color: rgba(255, 255, 255, 0.9);
+  max-width: 800; /* Increased width */
+  margin-left: 2rem;
+  margin-top: auto; /* Removed fixed margins */
+  margin-bottom: auto; /* Removed fixed margins */
+  border-radius: 1rem; /* Adjusted rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add a subtle shadow for depth */
+}
+
+.auth-form {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.auth-background {
+  flex: 1;
+  background: url('/background.jpg') no-repeat center center;
+  background-size: cover;
+  margin-left: 1rem;
+  border-radius: 1rem 0 0 1rem; /* Adjusted rounded corners */
+  overflow: hidden; /* Prevent content from overflowing rounded corners */
 }

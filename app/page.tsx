@@ -8,7 +8,7 @@ const Home = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('under-construction');
+    router.push('auth/login');
   }, [router]);
 
   return null;
