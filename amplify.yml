@@ -17,6 +17,6 @@ applications:
           - node_modules/**/*
       environment:
         variables:
-          AWS_REGION: "us-east-2"
-          AWS_ACCESS_KEY_ID: "AKIAW3MD7VFK2BFN4WJZ"
-          AWS_SECRET_ACCESS_KEY: "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"
+          AWS_REGION: ""
+          AWS_ACCESS_KEY_ID: ""
+          AWS_SECRET_ACCESS_KEY: ""
