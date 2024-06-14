@@ -37,7 +37,7 @@
     "**/*.tsx",
     "lib/setBackground.d.ts",
     ".next/types/**/*.ts"
-, "app/lib/setBackground.js"  ],
+, "app/lib/setBackground.js", "app/_app.js"  ],
   "exclude": [
     "node_modules"
   ]

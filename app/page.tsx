@@ -1,26 +1,23 @@
-// app/page.tsx
 "use client";
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
-const isLoggedIn = () => {
-  // Replace this with your actual logic to check if the user is authenticated
-  // For example, checking a token in local storage or calling an API
-  const token = localStorage.getItem('authToken');
-  return !!token;
-};
+import { useSession } from 'next-auth/react';
 
 const Home = () => {
   const router = useRouter();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (!isLoggedIn()) {
-      router.push('auth');
+    if (status === 'loading') return; // Do nothing while loading
+    if (!session) {
+      router.push('auth'); // Redirect to auth page if not logged in
+    } else {
+      router.push('data'); // Redirect to data page if logged in
     }
-  }, [router]);
+  }, [session, status, router]);
 
-  return null
+  return null;
 };
 
 export default Home;

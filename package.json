@@ -27,6 +27,7 @@
     "express": "^4.19.2",
     "global-tunnel-ng": "^2.7.1",
     "next": "14.2.3",
+    "next-auth": "^4.24.7",
     "proxy-agent": "^6.4.0",
     "react": "^18",
     "react-dom": "^18"
