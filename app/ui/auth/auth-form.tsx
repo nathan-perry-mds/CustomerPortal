@@ -11,7 +11,7 @@ import { AppProps } from 'next/app';
 import { useEffect } from 'react';
 import Link from "next/link";
 import Image from "next/image";
-import setBackground from '../../lib/setBackground';
+import setBackground from '../../lib/setBackground.js';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {

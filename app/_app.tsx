@@ -1,8 +1,9 @@
 import '../styles/globals.css';
 import { AppProps } from 'next/app';
 import '../lib/fontawesome'; // Import the Font Awesome configuration
+import setBackground from 'app/lib/setBackground' // Import Random Background picker
 import { useEffect } from 'react';
-import setBackground from '../lib/setBackground';
+
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {

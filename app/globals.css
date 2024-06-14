@@ -18,6 +18,11 @@
 
 body {
   color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(var(--background-end-rgb))
+  );
   background: rgb(var(--background-start-rgb));
 }
 
@@ -46,7 +51,7 @@ body {
   margin-bottom: auto; /* Removed fixed margins */
   border-radius: 1rem; /* Adjusted rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Add a subtle shadow for depth */
-  color: inherit; /* Ensure text color adapts to theme */
+  color: rgb(0,0,0); /* Ensure text color adapts to theme */
 }
 
 .auth-form {
@@ -62,7 +67,7 @@ body {
   overflow: hidden; /* Prevent content from overflowing rounded corners */
 }
 
-input, label, a, h1, button {
-  color: inherit !important;
-  background-color: transparent !important;
+/* Ensure all input elements and labels use the correct text color */
+input, label, a {
+  color: inherit;
 }
