@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
+    console.log('useEffect is called'); // Add this line
     setBackground();
   }, []);
 

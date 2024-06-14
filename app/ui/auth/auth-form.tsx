@@ -1,33 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import { lusitana } from "../fonts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAt, faKey, faExclamationCircle, faArrowRight, faUser } from "@fortawesome/pro-solid-svg-icons";
 import { Button } from "../components/button";
 import { useFormState, useFormStatus } from "react-dom";
 import { handleSignIn, handleSignUp } from "../../lib/cognitoActions";
-import { AppProps } from 'next/app';
-import { useEffect } from 'react';
 import Link from "next/link";
 import Image from "next/image";
-import setBackground from '../../lib/setBackground.js';
-
-function MyApp({ Component, pageProps }: AppProps) {
-  useEffect(() => {
-    setBackground();
-  }, []);
-
-  return <Component {...pageProps} />;
-}
 
 export default function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false);
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordMatchError, setPasswordMatchError] = useState('');
 
   const [signInErrorMessage, signInDispatch] = useFormState(handleSignIn, undefined);
   const [signUpErrorMessage, signUpDispatch] = useFormState(handleSignUp, undefined);
 
   const toggleForm = () => setIsSignUp(!isSignUp);
+
+  const handleSignUpSubmit = (event: FormEvent<HTMLFormElement>) => {
+    if (isSignUp && password !== confirmPassword) {
+      event.preventDefault();
+      setPasswordMatchError('Passwords do not match');
+    } else {
+      setPasswordMatchError('');
+    }
+  };
 
   return (
     <div className="auth-page">
@@ -35,10 +36,10 @@ export default function AuthForm() {
         <div className="flex justify-center mb-6">
           <Image src="/MDS-logo.jpg" alt="Company Logo" width={256} height={256} />
         </div>
-        <h1 className={`${lusitana.className} mb-3 text-2xl text-center`}>
+        <h1 className={`${lusitana.className} mb-3 text-3xl text-center`}>
           {isSignUp ? "Create an Account" : "Customer Portal"}
         </h1>
-        <form action={isSignUp ? signUpDispatch : signInDispatch} className="space-y-3 auth-form">
+        <form onSubmit={handleSignUpSubmit} action={isSignUp ? signUpDispatch : signInDispatch} className="space-y-6 auth-form">
           {isSignUp && (
             <div>
               <label className="mb-3 mt-5 block text-xs font-medium text-gray-900" htmlFor="name">
@@ -46,7 +47,7 @@ export default function AuthForm() {
               </label>
               <div className="relative">
                 <input
-                  className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 focus:outline-none focus:border-main focus:border-4"
                   id="name"
                   type="text"
                   name="name"
@@ -54,7 +55,7 @@ export default function AuthForm() {
                   required
                   minLength={4}
                 />
-                <FontAwesomeIcon icon={faUser} className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+                <FontAwesomeIcon icon={faUser} className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-main" />
               </div>
             </div>
           )}
@@ -64,14 +65,14 @@ export default function AuthForm() {
             </label>
             <div className="relative">
               <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 focus:outline-none focus:border-main focus:border-4"
                 id="email"
                 type="email"
                 name="email"
                 placeholder="Enter your email address"
                 required
               />
-              <FontAwesomeIcon icon={faAt} className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              <FontAwesomeIcon icon={faAt} className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-main" />
             </div>
           </div>
           <div className="mt-4">
@@ -80,15 +81,17 @@ export default function AuthForm() {
             </label>
             <div className="relative">
               <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 focus:outline-none focus:border-main focus:border-4"
                 id="password"
                 type="password"
                 name="password"
                 placeholder="Enter password"
                 required
                 minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
-              <FontAwesomeIcon icon={faKey} className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+              <FontAwesomeIcon icon={faKey} className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-main" />
             </div>
           </div>
           {isSignUp && (
@@ -98,15 +101,20 @@ export default function AuthForm() {
               </label>
               <div className="relative">
                 <input
-                  className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                  className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 focus:outline-none focus:border-main focus:border-4"
                   id="confirmPassword"
                   type="password"
                   name="confirmPassword"
                   placeholder="Confirm your password"
                   required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
-                <FontAwesomeIcon icon={faKey} className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+                <FontAwesomeIcon icon={faKey} className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-main" />
               </div>
+              {passwordMatchError && (
+                <p className="text-sm text-red-500 mt-1">{passwordMatchError}</p>
+              )}
             </div>
           )}
           <AuthButton isSignUp={isSignUp} />
