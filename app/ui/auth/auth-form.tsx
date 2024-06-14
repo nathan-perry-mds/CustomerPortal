@@ -11,7 +11,7 @@ import { AppProps } from 'next/app';
 import { useEffect } from 'react';
 import Link from "next/link";
 import Image from "next/image";
-import setBackground from '../../lib/setBackground.js';
+import setBackground from '../../lib/setBackground';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -132,7 +132,11 @@ export default function AuthForm() {
   );
 }
 
-function AuthButton({ isSignUp }) {
+interface AuthButtonProps {
+  isSignUp: boolean;
+}
+
+function AuthButton({ isSignUp }: AuthButtonProps) {
   const { pending } = useFormStatus();
   return (
     <Button className="mt-4 w-full bg-customBlue text-white" aria-disabled={pending}>
