@@ -1,10 +1,9 @@
 import '../styles/globals.css';
 import { AppProps } from 'next/app';
-import { Provider } from "next-auth/client";
+import { SessionProvider } from 'next-auth/react';
 import '../lib/fontawesome'; // Import the Font Awesome configuration
-import setBackground from 'app/lib/setBackground' // Import Random Background picker
+import setBackground from 'app/lib/setBackground'; // Import Random Background picker
 import { useEffect } from 'react';
-
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -13,10 +12,10 @@ function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <Provider session={pageProps.session}>
+    <SessionProvider session={pageProps.session}>
       <Component {...pageProps} />
-    </Provider>
-    );
+    </SessionProvider>
+  );
 }
 
 export default MyApp;
