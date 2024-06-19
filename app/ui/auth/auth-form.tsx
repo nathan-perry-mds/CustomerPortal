@@ -167,7 +167,7 @@ export default function AuthForm() {
                   id="verificationCode"
                   type="text"
                   name="code"
-                  placeholder="Enter the verification code sent to your email"
+                  placeholder="Enter the verification code"
                   required
                   value={verificationCode}
                   onChange={(e) => setVerificationCode(e.target.value)}
