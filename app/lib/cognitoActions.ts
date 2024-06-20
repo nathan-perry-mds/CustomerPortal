@@ -30,9 +30,7 @@ export async function handleSendEmailVerificationCode(
 ) {
   let currentState;
   try {
-    await resendSignUpCode({
-      username: String(formData.get("email")),
-    });
+    await resendSignUpCode({ username: String(formData.get("email")) });
     currentState = {
       ...prevState,
       message: "Code sent successfully",
@@ -42,40 +40,31 @@ export async function handleSendEmailVerificationCode(
       ...prevState,
       errorMessage: getErrorMessage(error),
     };
-    }
+  }
   return currentState;
 }
 
-export async function handleConfirmSignUp(
-  prevState: string | undefined,
-  formData: FormData
-) {
+export async function handleConfirmSignUp(prevState: string | undefined, formData: FormData) {
   try {
     await confirmSignUp({
       username: String(formData.get("email")),
       confirmationCode: String(formData.get("code")),
     });
+    return { success: true };
   } catch (error) {
-    return getErrorMessage(error);
+    return { success: false, error: getErrorMessage(error) };
   }
-  redirect("/auth");
 }
 
-export async function handleSignIn(
-  prevState: string | undefined,
-  formData: FormData
-) {
+export async function handleSignIn(prevState: string | undefined, formData: FormData) {
   let redirectLink = "/data";
   try {
-    const { isSignedIn, nextStep } = await signIn({
-      username: String(formData.get("email")),
-      password: String(formData.get("password")),
-    });
+    const { isSignedIn, nextStep } = await signIn({username: String(formData.get("email")), password: String(formData.get("password")),});
     if (nextStep.signInStep === "CONFIRM_SIGN_UP") {
       await resendSignUpCode({
         username: String(formData.get("email")),
       });
-      redirectLink = "/auth";
+      redirectLink = "/data";
     }
   } catch (error) {
     return getErrorMessage(error);

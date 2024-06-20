@@ -3,14 +3,16 @@
 import { useState, FormEvent } from "react";
 import { lusitana } from "../fonts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAt, faKey, faExclamationCircle, faArrowRight, faUser } from "@fortawesome/pro-solid-svg-icons";
+import { faAt, faKey, faExclamationCircle, faArrowRight, faUser, faRedo } from "@fortawesome/pro-solid-svg-icons";
 import { Button } from "../components/button";
-import { useFormState, useFormStatus } from "react-dom";
-import { handleSignIn, handleSignUp, handleConfirmSignUp } from "../../lib/cognitoActions";
+import { handleSignIn, handleSignUp, handleConfirmSignUp, handleSendEmailVerificationCode } from "../../lib/cognitoActions";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";  // Import useRouter from next/navigation
 
 export default function AuthForm() {
+  const router = useRouter();  // Initialize useRouter
+
   const [isSignUp, setIsSignUp] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [password, setPassword] = useState('');
@@ -18,33 +20,86 @@ export default function AuthForm() {
   const [passwordMatchError, setPasswordMatchError] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [email, setEmail] = useState('');
-
-  const [signInErrorMessage, signInDispatch] = useFormState(handleSignIn, undefined);
-  const [signUpErrorMessage, signUpDispatch] = useFormState(handleSignUp, undefined);
-  const [verifyErrorMessage, verifyDispatch] = useFormState(handleConfirmSignUp, undefined);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const toggleForm = () => setIsSignUp(!isSignUp);
 
-  const handleSignUpSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSignUpSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isSignUp && password !== confirmPassword) {
       setPasswordMatchError('Passwords do not match');
     } else {
       setPasswordMatchError('');
+      setLoading(true);
       const formData = new FormData(event.target as HTMLFormElement);
-      setEmail(formData.get('email') as string);
-      signUpDispatch(formData);
-      setIsVerifying(true);
+      setEmail(String(formData.get('email')));
+
+      try {
+        const error = await handleSignUp(undefined, formData);
+        if (error) {
+          setErrorMessage(error);
+        } else {
+          setIsVerifying(true);
+        }
+      } catch (error) {
+        setErrorMessage('An error occurred during sign up');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  const handleVerifySubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleVerifySubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.target as HTMLFormElement);
-    verifyDispatch(formData);
-    if (!verifyErrorMessage) {
-      setIsVerifying(false);
-      setIsSignUp(false);
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("code", verificationCode);
+
+    try {
+      const result = await handleConfirmSignUp(undefined, formData);
+      if (result === true) {  // Check for success
+        setSuccessMessage('Verification successful! Logging in...');
+        // Show success message and then log in the user after a delay
+        setTimeout(async () => {
+          const signInFormData = new FormData();
+          signInFormData.append("email", email);
+          signInFormData.append("password", password);
+          const redirectLink = await handleSignIn(undefined, signInFormData);
+          if (typeof redirectLink === 'string') {
+            router.push(redirectLink);
+          } else {
+            setErrorMessage(redirectLink);
+          }
+        }, 3000); // 3-second delay to show the success message
+      } else {
+        setErrorMessage(result);
+      }
+    } catch (error) {
+      setErrorMessage('Invalid code provided, please request a code again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendCode = async () => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("email", email);
+
+    try {
+      const state = await handleSendEmailVerificationCode({ message: '', errorMessage: '' }, formData);
+      if (state.errorMessage) {
+        setErrorMessage(state.errorMessage);
+      } else {
+        setSuccessMessage(state.message);
+      }
+    } catch (error) {
+      setErrorMessage('An error occurred while resending the code.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -138,7 +193,7 @@ export default function AuthForm() {
                 )}
               </div>
             )}
-            <AuthButton isSignUp={isSignUp} isVerifying={isVerifying} />
+            <AuthButton isSignUp={isSignUp} isVerifying={isVerifying} loading={loading} />
             <div className="flex justify-center">
               <a onClick={toggleForm} className="mt-2 cursor-pointer text-blue-500">
                 {isSignUp ? "Already have an account? Log in." : "Don't have an account? Sign up."}
@@ -146,10 +201,10 @@ export default function AuthForm() {
             </div>
             <div className="flex h-8 items-end space-x-1">
               <div className="flex h-8 items-end space-x-1" aria-live="polite" aria-atomic="true">
-                {(isSignUp ? signUpErrorMessage : signInErrorMessage) && (
+                {errorMessage && (
                   <>
                     <FontAwesomeIcon icon={faExclamationCircle} className="h-5 w-5 text-red-500" />
-                    <p className="text-sm text-red-500">{isSignUp ? signUpErrorMessage : signInErrorMessage}</p>
+                    <p className="text-sm text-red-500">{errorMessage}</p>
                   </>
                 )}
               </div>
@@ -174,9 +229,15 @@ export default function AuthForm() {
                 />
                 <FontAwesomeIcon icon={faKey} className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-main" />
               </div>
-              {verifyErrorMessage && <p className="text-sm text-red-500 mt-1">{verifyErrorMessage}</p>}
+              {errorMessage && <p className="text-sm text-red-500 mt-1">{errorMessage}</p>}
+              {successMessage && <p className="text-sm text-green-500 mt-1">{successMessage}</p>}
             </div>
-            <AuthButton isVerifying={true} />
+            <AuthButton isVerifying={true} loading={loading} />
+            <div className="flex justify-center mt-4">
+              <Button onClick={handleResendCode} className="bg-gray-300 text-black" aria-disabled={loading}>
+                {loading ? "Resending..." : "Resend Code"} <FontAwesomeIcon icon={faRedo} className="ml-2 h-5 w-5 text-black" />
+              </Button>
+            </div>
           </form>
         )}
       </div>
@@ -188,17 +249,17 @@ export default function AuthForm() {
 interface AuthButtonProps {
   isSignUp?: boolean;
   isVerifying?: boolean;
+  loading?: boolean;
 }
 
-function AuthButton({ isSignUp, isVerifying }: AuthButtonProps) {
-  const { pending } = useFormStatus();
+function AuthButton({ isSignUp, isVerifying, loading }: AuthButtonProps) {
   let buttonText = "Log In";
   if (isSignUp) buttonText = "Sign Up";
   if (isVerifying) buttonText = "Verify";
 
   return (
-    <Button className="mt-4 w-full bg-customBlue text-white" aria-disabled={pending}>
-      {buttonText} <FontAwesomeIcon icon={faArrowRight} className="ml-auto h-5 w-5 text-gray-50" />
+    <Button className="mt-4 w-full bg-customBlue text-white" aria-disabled={loading}>
+      {loading ? "Loading..." : buttonText} <FontAwesomeIcon icon={faArrowRight} className="ml-auto h-5 w-5 text-gray-50" />
     </Button>
   );
 }
